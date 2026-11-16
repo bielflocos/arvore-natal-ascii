@@ -69,7 +69,8 @@ function render(t){
 let paused=matchMedia('(prefers-reduced-motion: reduce)').matches,time=paused?19:0,last=performance.now(),lastDraw=0;
 const pause=document.querySelector('#pause'),status=document.querySelector('#status');
 function sync(){pause.textContent=paused?'Continuar':'Pausar';pause.setAttribute('aria-pressed',String(paused));}sync();render(time);
-function tick(now){const dt=Math.min((now-last)/1000,.1);last=now;if(!paused&&!document.hidden)time+=dt;if(now-lastDraw>33&&!paused&&!document.hidden){render(time);lastDraw=now;}requestAnimationFrame(tick);}requestAnimationFrame(tick);
+function tick(now){const dt=(now-last)/1000;last=now;if(!paused&&!document.hidden)time+=dt;if(now-lastDraw>33&&!paused&&!document.hidden){render(time);lastDraw=now;}requestAnimationFrame(tick);}requestAnimationFrame(tick);
+document.addEventListener('visibilitychange',()=>{last=performance.now();});
 pause.onclick=()=>{paused=!paused;sync();};
 document.querySelector('#restart').onclick=()=>{time=0;paused=false;sync();render(time);};
 document.querySelector('#save').onclick=()=>{const a=document.createElement('a');a.download='natal-ascii.png';a.href=canvas.toDataURL('image/png');a.click();};
